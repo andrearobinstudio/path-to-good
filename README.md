@@ -6,7 +6,7 @@
 
 ---
 
-<div align="center">
+<div align="left">
 
 <br>
 
@@ -160,14 +160,6 @@ required of themselves.
 
 </div>
 
----
-
-## What this is
-
-*Path to Good* is a personal navigation tool — a 3D star chart mapping paths to goodness through queering contemplative spirituality. It draws on theology, neuroscience, somatic practice, liberation psychology, queer theory, and art practice to place 35 stars across eight constellations of equal dignity.
-
-No hierarchy. No sequence. Just a sky you return to.
-
 ### The three dimensions
 
 | Axis | Poles |
@@ -202,31 +194,6 @@ No hierarchy. No sequence. Just a sky you return to.
 ## The foundational principle
 
 To queer contemplative spirituality is to notice that many of the core insights of contemplative traditions — the dissolution of fixed identity, the transgression of boundaries between self and other, the destabilisation of normative categories, the insistence that the sacred exceeds all human attempts to contain it — are themselves profoundly queer in their logic.
-
-The second satan — the hoarding of power by any institution — leaves the body carrying its violence: religious systems, medical systems, carceral systems, colonial logic, family systems, workplaces that extract and discard. The path to goodness begins with naming the system, not internalizing the wound.
-
-Self-compassion is the ground from which everything else becomes possible. You navigate from here, not toward here.
-
-*No cult. No surprise. Just the constant journey toward.*
-
----
-
-## Running locally
-
-```bash
-git clone https://github.com/andrearobinstudio/path-to-good.git
-cd path-to-good
-open index.html
-```
-
-## Deploying to GitHub Pages
-
-1. Go to your repository **Settings → Pages**
-2. Under **Source**, select **Deploy from a branch**
-3. Choose **main** branch, **/ (root)** folder
-4. Click **Save**
-
-Your chart will be live at `https://andrearobinstudio.github.io/path-to-good` within a few minutes.
 
 ---
 
