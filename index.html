@@ -213,30 +213,122 @@
       border-top: 0.5px solid var(--border);
     }
 
-    .about h2 {
+    .poem-title {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #e8e4ff;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.2rem;
+    }
+
+    .poem-dedication {
       font-size: 0.85rem;
+      font-style: italic;
+      color: #b0acda;
+      margin-bottom: 2rem;
+    }
+
+    .poem {
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+    }
+
+    .poem p {
+      font-size: 0.95rem;
+      color: #ccc8f0;
+      line-height: 1.85;
+      margin-bottom: 1.2rem;
+      font-weight: 300;
+    }
+
+    .poem p em {
+      font-style: italic;
+      color: #b8b4e8;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--accent);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.10em;
       text-transform: uppercase;
       margin-bottom: 0.75rem;
+      margin-top: 2rem;
     }
 
-    .about p {
+    .about-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .about-table th {
+      text-align: left;
+      color: #b0acda;
+      font-weight: 500;
+      padding: 0.4rem 1rem 0.4rem 0;
+      border-bottom: 0.5px solid rgba(180,170,255,0.15);
+    }
+
+    .about-table td {
+      color: #c0bcec;
+      padding: 0.45rem 1rem 0.45rem 0;
+      border-bottom: 0.5px solid rgba(180,170,255,0.07);
+      line-height: 1.5;
+      vertical-align: top;
+    }
+
+    .about-table td:first-child {
+      color: #d8d4ff;
+      font-weight: 400;
+      white-space: nowrap;
+      padding-right: 1.5rem;
+    }
+
+    .how-to {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .how-to li {
       font-size: 0.875rem;
-      color: var(--text-muted);
-      max-width: 680px;
-      line-height: 1.75;
-      margin-bottom: 0.75rem;
+      color: #c0bcec;
+      padding: 0.3rem 0;
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.6;
     }
 
-    .about p a {
+    .how-to li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .principle {
+      font-size: 0.875rem;
+      color: #c0bcec;
+      max-width: 640px;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .about-credit {
+      font-size: 0.8rem;
+      color: #8884b8;
+      margin-top: 1.5rem;
+    }
+
+    .about-credit a {
       color: var(--accent);
       text-decoration: none;
       border-bottom: 0.5px solid rgba(176,168,240,0.3);
     }
 
-    .about p a:hover {
+    .about-credit a:hover {
       border-bottom-color: var(--accent);
     }
 
@@ -287,19 +379,72 @@
   </div>
 
   <div class="about">
-    <h2>About this chart</h2>
-    <p>
-      To queer contemplative spirituality is to notice that many of the core insights of contemplative traditions — the dissolution of fixed identity, the transgression of boundaries between self and other, the destabilisation of normative categories, the insistence that the sacred exceeds all human attempts to contain it — are themselves profoundly queer in their logic.
-    </p>
-    <p>
-      Each star carries a spiritual name, a scholarly anchor, a description, and bibliography roots. The three axes represent dimensions of lived human experience: where attention moves (inward or outward), where transformation is in its cycle (dissolution or integration), and what scale of reality is being engaged (the embodied or the transpersonal). Stars that sit close to one another share something. The lines between them are not sequences — they are relationships.
-    </p>
-    <p>
-      No cult. No surprise. Just the constant journey toward.
-    </p>
-    <p>
-      Created by <a href="https://github.com/andrearobinstudio" target="_blank" rel="noopener">Andrea Robin Studio</a> · Built with care and curiosity.
-    </p>
+
+    <h2 class="poem-title">The Asking</h2>
+    <p class="poem-dedication">for Rebecca Elson (1960–1999), astronomer and poet</p>
+
+    <div class="poem">
+      <p>Lost at sea, I did not pray.<br>I looked up.</p>
+      <p>The stars do not care<br>whether you find them useful.<br>That is what I love about them.</p>
+      <p>The iron in my blood<br>was made in a violence<br>I have no name for.<br>It crossed three billion years<br>to end up here, useful,<br>carrying oxygen to these particular thoughts<br>in this particular dark.</p>
+      <p><em>Consider that.</em></p>
+      <p>I have been lost in the wilderness<br>where the trees repeat themselves<br>the way trauma does,<br>each turn arriving<br>at the same clearing.</p>
+      <p>I looked up.</p>
+      <p>Not for guidance exactly —<br>the stars are not a map,<br>they are a fact,<br>and the fact is this:<br>you are already made of the thing<br>you thought you were seeking.</p>
+      <p>I have been lost in the desert<br>where my shadow at noon<br>was the only dark available,<br>and I lay down in it,<br>and I looked up,<br>and I thought:</p>
+      <p><em>the light arriving now<br>left its source<br>before I was a thought,<br>before the carbon was assembled<br>into whatever this is<br>that doubts and hungers —</em></p>
+      <p>and I was not comforted exactly<br>but I was<br>repositioned.</p>
+      <p>This is my religion:<br>that matter,<br>given enough pressure and time,<br>wakes up.</p>
+      <p>That somewhere in the forging<br>of iron in a dying star<br>the universe began<br>practicing<br>for us.</p>
+      <p>That what came out of the supernovae —<br>all that gorgeous debris —<br>arranged itself eventually<br>into something that could ask<br><em>why</em>.</p>
+      <p>The asking is the thing.<br>Not the answer.<br>The asking.</p>
+      <p>Sometimes it is enough<br>to lie here in the wilderness,<br>the sea, the sand,<br>in whatever lostness<br>has found me this season,</p>
+      <p>and know that the dark overhead<br>is not empty<br>but full<br>of what we cannot yet see —</p>
+      <p>that I am inferred<br>the way dark matter is inferred,<br>by the way other things<br>move around me,</p>
+      <p>that even unconstrained by form<br>I was already here,<br>in the first warm scatter<br>of things becoming things.</p>
+      <p>We are a window.<br>Briefly.<br>The universe<br>looking at itself<br>and finding it<br>has questions.</p>
+      <p>That is enough.<br>That is more<br>than the stars<br>required of themselves.</p>
+    </div>
+
+    <p class="section-title">The three dimensions</p>
+    <table class="about-table">
+      <thead><tr><th>Axis</th><th>Poles</th></tr></thead>
+      <tbody>
+        <tr><td>X — Inward ↔ Outward</td><td>Interior life toward the relational, political, and ecological</td></tr>
+        <tr><td>Y — Dissolution ↔ Integration</td><td>Grief and dark night upward toward wholeness and purpose</td></tr>
+        <tr><td>Z — Embodied ↔ Transpersonal</td><td>Cellular somatic sensation toward the cosmic and mystical</td></tr>
+      </tbody>
+    </table>
+
+    <p class="section-title">The eight constellations</p>
+    <table class="about-table">
+      <thead><tr><th>Constellation</th><th>Thread</th></tr></thead>
+      <tbody>
+        <tr><td>The Body's Wisdom</td><td>Polyvagal theory, interoception, trauma, contemplative neuroscience</td></tr>
+        <tr><td>The Hearthstone</td><td>Self-compassion, rupture, repair, recognition</td></tr>
+        <tr><td>The Mystical Thread</td><td>Via negativa, kenosis, non-dual awareness, discernment</td></tr>
+        <tr><td>The Engaged Path</td><td>Liberation theology, lo cotidiano, engaged practice</td></tr>
+        <tr><td>The Wide Waters</td><td>Earth as theological partner, interbeing, the mystery</td></tr>
+        <tr><td>The Dark Night</td><td>Grief, the dark night of the soul, non-extractive love</td></tr>
+        <tr><td>The Queer Path</td><td>Second-satan-induced trauma, exile, body theology, queer mysticism</td></tr>
+        <tr><td>The Making</td><td>Art as contemplation, flow, somatic art, process over product</td></tr>
+      </tbody>
+    </table>
+
+    <p class="section-title">How to use it</p>
+    <ul class="how-to">
+      <li>Drag to rotate through all three dimensions</li>
+      <li>Scroll to zoom in and out</li>
+      <li>Click any constellation in the legend to highlight that group</li>
+      <li>Click any star to read its spiritual name, scholarly anchor, description, and bibliography references</li>
+      <li>Click again or click empty sky to dismiss</li>
+    </ul>
+
+    <p class="section-title">The foundational principle</p>
+    <p class="principle">To queer contemplative spirituality is to notice that many of the core insights of contemplative traditions — the dissolution of fixed identity, the transgression of boundaries between self and other, the destabilisation of normative categories, the insistence that the sacred exceeds all human attempts to contain it — are themselves profoundly queer in their logic.</p>
+
+    <p class="about-credit">Created by <a href="https://github.com/andrearobinstudio" target="_blank" rel="noopener">Andrea Robin Studio</a></p>
+
   </div>
 </main>
 
