@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Path to Good — A Star Chart for Queering Contemplative Spirituality</title>
+  <meta name="description" content="An interactive 3D star chart mapping paths to goodness through queering contemplative spirituality. Eight constellations of equal dignity — no hierarchy, all threads." />
+  <meta property="og:title" content="Path to Good" />
+  <meta property="og:description" content="An interactive star chart for navigating queering contemplative spirituality. Eight constellations: The Body's Wisdom, The Hearthstone, The Mystical Thread, The Engaged Path, The Wide Waters, The Dark Night, The Queer Path, The Making." />
+  <meta property="og:type" content="website" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #08091f;
+      --surface: #0c1030;
+      --border: rgba(180, 170, 255, 0.18);
+      --text-primary: #ddd8ff;
+      --text-secondary: #9896b8;
+      --text-muted: #52507a;
+      --text-dim: #32305a;
+      --accent: #b0a8f0;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 2.5rem 2rem 1rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    header h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1rem 3rem;
+    }
+
+    #wrap {
+      position: relative;
+      user-select: none;
+      margin-bottom: 1rem;
+    }
+
+    #sky {
+      display: block;
+      width: 100%;
+      border-radius: 16px;
+      cursor: grab;
+      touch-action: none;
+      border: 0.5px solid var(--border);
+    }
+
+    #sky:active { cursor: grabbing; }
+
+    #popup {
+      position: absolute;
+      display: none;
+      width: 260px;
+      background: var(--surface);
+      border: 0.5px solid rgba(180, 170, 255, 0.28);
+      border-radius: 10px;
+      padding: 14px 16px;
+      pointer-events: none;
+      z-index: 20;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    #popup .pn {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin: 0 0 2px;
+      line-height: 1.3;
+    }
+
+    #popup .pc {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 5px;
+    }
+
+    #popup .pa {
+      font-size: 11px;
+      font-style: italic;
+      margin: 0 0 7px;
+      line-height: 1.4;
+    }
+
+    #popup .pd {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    #popup .pr {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin: 8px 0 0;
+      border-top: 0.5px solid rgba(180, 170, 255, 0.09);
+      padding-top: 7px;
+      line-height: 1.5;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+
+    .axes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 1.2rem;
+      padding: 1rem;
+      background: rgba(180,170,255,0.03);
+      border-radius: 10px;
+      border: 0.5px solid var(--border);
+    }
+
+    .ax {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .ax span {
+      display: block;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 2px;
+      font-size: 11px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 1.5rem;
+    }
+
+    .li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: 0.5px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .li:hover {
+      border-color: var(--border);
+      color: var(--text-secondary);
+    }
+
+    .li.active {
+      border-color: rgba(180, 170, 255, 0.4);
+      background: rgba(180, 170, 255, 0.06);
+      color: var(--text-primary);
+    }
+
+    .ld {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .about {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .about h2 {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .about p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      line-height: 1.75;
+      margin-bottom: 0.75rem;
+    }
+
+    .about p a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 0.5px solid rgba(176,168,240,0.3);
+    }
+
+    .about p a:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 11px;
+      color: var(--text-dim);
+      border-top: 0.5px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 1.5rem 1rem 0.75rem; }
+      .axes { grid-template-columns: 1fr; }
+      #popup { width: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Path to <em>Good</em></h1>
+  <p>A star chart for navigating queering contemplative spirituality — eight constellations of equal dignity, no hierarchy, all threads.</p>
+</header>
+
+<main>
+  <div class="controls">
+    <div class="legend" id="legend"></div>
+    <p class="hint">Click a constellation to highlight it &nbsp;·&nbsp; Drag to rotate &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Click any star to read it</p>
+  </div>
+
+  <div id="wrap">
+    <canvas id="sky"></canvas>
+    <div id="popup">
+      <div class="pn" id="pn"></div>
+      <div class="pc" id="pc"></div>
+      <div class="pa" id="pa"></div>
+      <div class="pd" id="pd"></div>
+      <div class="pr" id="pr"></div>
+    </div>
+  </div>
+
+  <div class="axes">
+    <div class="ax"><span>X — Inward ↔ Outward</span>Interior life toward the relational, political, and ecological</div>
+    <div class="ax"><span>Y — Dissolution ↔ Integration</span>Grief and dark night upward toward wholeness and purpose</div>
+    <div class="ax"><span>Z — Embodied ↔ Transpersonal</span>Cellular somatic sensation toward the cosmic and mystical</div>
+  </div>
+
+  <div class="about">
+    <h2>About this chart</h2>
+    <p>
+      To queer contemplative spirituality is to notice that many of the core insights of contemplative traditions — the dissolution of fixed identity, the transgression of boundaries between self and other, the destabilisation of normative categories, the insistence that the sacred exceeds all human attempts to contain it — are themselves profoundly queer in their logic.
+    </p>
+    <p>
+      Each star carries a spiritual name, a scholarly anchor, a description, and bibliography roots. The three axes represent dimensions of lived human experience: where attention moves (inward or outward), where transformation is in its cycle (dissolution or integration), and what scale of reality is being engaged (the embodied or the transpersonal). Stars that sit close to one another share something. The lines between them are not sequences — they are relationships.
+    </p>
+    <p>
+      No cult. No surprise. Just the constant journey toward.
+    </p>
+    <p>
+      Created by <a href="https://github.com/andrearobinstudio" target="_blank" rel="noopener">Andrea Robin Studio</a> · Built with care and curiosity.
+    </p>
+  </div>
+</main>
+
+<footer>
+  path-to-good &nbsp;·&nbsp; open source &nbsp;·&nbsp; <a href="https://github.com/andrearobinstudio/path-to-good" style="color:inherit;text-decoration:none;border-bottom:0.5px solid rgba(255,255,255,0.2);">github.com/andrearobinstudio/path-to-good</a>
+</footer>
+
+<script>
+const canvas = document.getElementById('sky');
+const ctx = canvas.getContext('2d');
+const popup = document.getElementById('popup');
+
+const CONSTELLATIONS = [
+  { id:'body',       label:"The Body's Wisdom",   color:'#4a9edd' },
+  { id:'compassion', label:'The Hearthstone',     color:'#d4537e' },
+  { id:'mystic',     label:'The Mystical Thread', color:'#b0a8f0' },
+  { id:'justice',    label:'The Engaged Path',    color:'#e09020' },
+  { id:'earth',      label:'The Wide Waters',     color:'#3dbf8a' },
+  { id:'grief',      label:'The Dark Night',      color:'#8866cc' },
+  { id:'queer',      label:'The Queer Path',      color:'#e05070' },
+  { id:'making',     label:'The Making',          color:'#d08030' },
+];
+const cc = {};
+CONSTELLATIONS.forEach(c => cc[c.id] = c.color);
+
+const STARS = [
+  { id:'interoception', cat:'body', r:5, x:-0.70, y:0.10, z:-0.78, name:'Sensing the body from within', anchor:'Interoception — Anil Seth, Garfinkel', desc:'The brain\'s reading of its own internal state is the biological root of self-awareness and empathy. The self is a controlled hallucination built on bodily prediction. You cannot recognize the human in another without first learning to sense yourself.', refs:'Seth (2021) Being You · Garfinkel et al. (2015) · Siegel — The Mindful Brain' },
+  { id:'polyvagal', cat:'body', r:6, x:-0.50, y:-0.18, z:-0.68, name:'The nervous system as navigator', anchor:'Polyvagal theory — Stephen Porges', desc:'Three autonomic states: ventral vagal (safety), sympathetic (fight/flight), dorsal vagal (freeze). Systems that hoard power dysregulate the body chronically. Repair through attuned presence returns us to ventral vagal. Intimacy is two nervous systems learning safety together.', refs:'Porges (2011) The Polyvagal Theory · Dana (2018) · Shipherd & Aafjes-van Doorn (2021)' },
+  { id:'window', cat:'body', r:4.5, x:-0.60, y:0.22, z:-0.58, name:'Window of tolerance', anchor:'Siegel; Ogden — sensorimotor psychotherapy', desc:'The zone of arousal within which integration is possible. Chronic exposure to second-satan systems narrows this window. Contemplative and somatic practice widen it over time. The spiritual journey is partly the expansion of what the body can be present to.', refs:'Siegel (2007) The Mindful Brain · Ogden et al. (2006) Trauma and the Body · Treleaven (2018)' },
+  { id:'trauma', cat:'body', r:5.5, x:-0.40, y:-0.70, z:-0.80, name:'Trauma metabolized', anchor:'Levine — somatic experiencing; van der Kolk', desc:'Trauma is incomplete biological responses stored in the body. The path back runs through the body, not around it. The alchemy of pain is a literal, biological process — not metaphor.', refs:'van der Kolk (2014) The Body Keeps the Score · Levine (1997) Waking the Tiger · Treleaven (2018)' },
+  { id:'difficult', cat:'body', r:4.5, x:-0.50, y:-0.46, z:-0.46, name:'The difficult side of practice', anchor:'Britton — Cheetah House; Treleaven (2018)', desc:'Contemplative practice can be destabilising for those carrying second-satan wounds. Depersonalisation, increased anxiety, psychotic episodes are documented. No spiritual bypassing. Trauma-sensitive mindfulness is not optional. The difficult is part of the map.', refs:'Lindahl et al. (2017) PLOS ONE · Grof & Grof (1989) Spiritual Emergency · Treleaven (2018)' },
+  { id:'contemp_neuro', cat:'body', r:5, x:-0.28, y:0.44, z:-0.30, name:'Contemplative neuroscience', anchor:'Davidson, Lutz, Lazar; Vessel et al. (2012)', desc:'Sustained practice produces measurable structural changes: thickened insula, enlarged prefrontal cortex, altered default mode network. Profound aesthetic experience activates the same networks as meditation. Practice — and making — reorganize the brain.', refs:'Davidson & Begley (2012) · Lutz et al. (2004) PNAS · Vessel et al. (2012) · Kaimal et al. (2016) · Van Dam et al. (2018)' },
+  { id:'selfcompass', cat:'compassion', r:9.5, x:-0.08, y:0.30, z:-0.08, name:'Self-compassion as ground', anchor:'Neff — three components; Coakley — kenosis as strength', desc:'Self-kindness, common humanity, mindfulness. The most empirically robust predictor of sustained wellbeing. Coakley\'s feminist kenosis: self-emptying not as submission but as groundedness from which genuine relating becomes possible. The North Star. You navigate from here, not toward here.', refs:'Neff (2011) Self-Compassion · Coakley (2002) Powers and Submissions · Fredrickson et al. (2008) JPSP' },
+  { id:'rupture', cat:'compassion', r:5.5, x:0.10, y:-0.50, z:-0.16, name:'Rupture', anchor:'Tronick — still face; Bowlby; Ainsworth', desc:'Rupture is an ordinary feature of every intimate relationship from the earliest weeks of life. The body registers disconnection as threat. No cult of seamlessness. Not a moral failure — not a policing of the self.', refs:'Tronick et al. (1978) · Bowlby (1988) A Secure Base · Ainsworth et al. (1978)' },
+  { id:'repair', cat:'compassion', r:6.5, x:0.28, y:0.22, z:0.10, name:'Repair', anchor:'Secure attachment — Mary Main; Porges — co-regulation', desc:'Secure attachment is not the absence of rupture but the reliable experience of repair. What predicts security is not perfect attunement but the capacity to return after rupture. Repair is the engine of real intimacy. The turning back toward.', refs:'Main & Goldwyn (1984) AAI · Siegel (2012) The Developing Mind · Porges (2011)' },
+  { id:'recognition', cat:'compassion', r:6, x:0.20, y:0.12, z:0.20, name:'The human in you is the human in me', anchor:'Neff — common humanity; Buber — I and Thou', desc:'Common humanity counters shame\'s isolation. Buber\'s I-Thou: genuine encounter in which neither person is reduced to an object. No hierarchy of suffering. No cult of the enlightened. The constant journey toward one another.', refs:'Neff (2003) · Buber (1923/1970) I and Thou · Siegel (2007) · Rodriguez & Ouellette (2000)' },
+  { id:'apophatic', cat:'mystic', r:5.5, x:-0.62, y:0.52, z:0.70, name:'The via negativa', anchor:'Pseudo-Dionysius; Cloud of Unknowing; Eckhart; Keller (2015)', desc:'Knowing the sacred through what cannot be said. Structurally queer in its logic — resisting every institutional closure. Keller\'s Cloud of the Impossible brings apophatic theology into conversation with quantum physics and queer theory. The mystery is not a problem to solve.', refs:'Cloud of Unknowing (c.1375) · Eckhart — Complete Mystical Works · Keller (2015) Cloud of the Impossible · Boesel & Keller (2010) Apophatic Bodies' },
+  { id:'kenosis', cat:'mystic', r:5.5, x:-0.22, y:0.62, z:0.60, name:'Kenosis — self-emptying', anchor:'Coakley; Cheng — radical love; Teilhard', desc:'The divine act of relinquishing power — reread by feminist and queer theologians as freely chosen vulnerability that is itself strength. Cheng\'s radical love: the dissolution of boundaries mirrors contemplative non-dual awareness. Emptying not from depletion but from abundance.', refs:'Coakley (2002) · Cheng (2011) Radical Love · Teilhard (1960) The Divine Milieu · Keller (2003) Face of the Deep' },
+  { id:'nondual', cat:'mystic', r:6, x:-0.10, y:0.82, z:0.90, name:'Non-dual awareness', anchor:'Advaita Vedanta; Zen — Suzuki; Josipovic (2014)', desc:'Awareness prior to the subject-object split. Cheng: queer theology\'s dissolution of fixed identity mirrors this ground. Not a state to achieve but what is always already present beneath the grasping.', refs:'Suzuki (1970) Zen Mind · Josipovic (2014) ANYAS · Michaelson (2011) Everything Is God · Cheng (2011) Radical Love' },
+  { id:'discern', cat:'mystic', r:6.5, x:-0.32, y:0.48, z:0.28, name:'Discernment', anchor:'Teresa of Ávila; IFS Self-energy — Schwartz; Mark & Jankowski (2021)', desc:'The skill to sense what is life-giving versus death-dealing. For LGBTQ+ practitioners, discernment has often been forged in survival — a charism sharpened by navigating hostile environments. Mark & Jankowski\'s research on queering spiritual direction names this gift explicitly.', refs:'Teresa of Ávila — Interior Castle · Schwartz (1995) IFS · Mark & Jankowski (2021) Pastoral Psychology · Fortunato (1982)' },
+  { id:'intertraditional', cat:'mystic', r:5, x:0.18, y:0.50, z:0.50, name:'Cross-traditional encounter', anchor:'Merton; Thich Nhat Hanh; Rumi; Michaelson', desc:'Something recognizable passes between traditions. Rumi\'s Masnavi is saturated with same-sex desire — often suppressed in Western translation. Michaelson holds LGBTQ+ identity and Jewish mystical practice together without dissolving either.', refs:'Merton (1968) Zen and the Birds of Appetite · Thich Nhat Hanh (1988) · Rumi — Masnavi · Michaelson (2011) · Leyland (1998) Queer Dharma' },
+  { id:'liberationtheol', cat:'justice', r:6, x:0.62, y:0.10, z:0.20, name:'Liberation theology', anchor:'Gutiérrez; Cone; Althaus-Reid — Indecent Theology', desc:'The sacred located in the bodies of the marginalized. Althaus-Reid: honest theology must begin from the body as it actually is. Cone: God is found among those who suffer. Indecent theology refuses to sanitise the body, desire, or politics.', refs:'Gutiérrez (1971) · Cone (1970) · Althaus-Reid (2000) Indecent Theology · Althaus-Reid (2003) The Queer God' },
+  { id:'engaged', cat:'justice', r:5.5, x:0.48, y:0.28, z:0.10, name:'Engaged practice', anchor:'Thich Nhat Hanh; Merton; hooks; Lorde', desc:'Inner transformation and outer transformation are not separate projects. Contemplation that does not turn outward toward justice risks — as Merton wrote — becoming a sophisticated form of spiritual self-indulgence. Lorde: the erotic as a source of knowledge and resistance.', refs:'Thich Nhat Hanh (1987) Being Peace · hooks (1994) Teaching to Transgress · Lorde (1984) Sister Outsider · Rothberg (2006)' },
+  { id:'mujerista', cat:'justice', r:5, x:0.40, y:0.20, z:-0.10, name:'Lo cotidiano — the sacred daily', anchor:'Mujerista theology — Isasi-Díaz; Womanist — Williams', desc:'The everyday, the communal, and the embodied as sites of the sacred. Isasi-Díaz\'s lo cotidiano: daily life as the locus of theological reflection. No specialness required. The ordinary is already holy. The kitchen table is a theological location.', refs:'Isasi-Díaz (1993) En la Lucha · Williams (1993) Sisters in the Wilderness · Townes (1993)' },
+  { id:'permission', cat:'justice', r:4.5, x:0.12, y:-0.10, z:-0.30, name:'Permission surrendered', anchor:'Apophatic theology; IFS; Brown — shame research', desc:'Deciding goodness is not granted by any institution or system. Releasing the manager-parts that sought approval from power. Naming the system rather than internalizing it is the first act of liberation. You were always enough.', refs:'Brown (2010) The Gifts of Imperfection · Schwartz (1995) IFS · Fortunato (1982) Embracing the Exile' },
+  { id:'earth_partner', cat:'earth', r:6.5, x:0.68, y:0.42, z:0.70, name:'Earth as theological partner', anchor:'Berry — The Dream of the Earth; Margulis; Sheldrake; queer ecology', desc:'Life arose through symbiosis, not competition. Forests are networks of mutual dependency. The same logic that hoards power over queer bodies also justifies the domination of Earth. Queer ecology names these refusals as one refusal.', refs:'Berry (1988) The Dream of the Earth · Sheldrake (2020) Entangled Life · Sandilands & Erickson (2010) Queer Ecologies · Abram (1996)' },
+  { id:'interbeing', cat:'earth', r:5.5, x:0.60, y:0.52, z:0.58, name:'Interbeing', anchor:'Thich Nhat Hanh; Naess — deep ecology; Abram', desc:'The radical interdependence of all phenomena. There is no separate self that could be saved or damned alone. The ecological and the contemplative are one movement.', refs:'Thich Nhat Hanh (1988) Interbeing · Naess (1989) Ecology Community Lifestyle · Abram (1996) · Gaard (1993) Ecofeminism' },
+  { id:'mystery', cat:'earth', r:8.5, x:0.38, y:0.90, z:0.92, name:'The mystery held openly', anchor:'Cloud of Unknowing; Keats — negative capability; Anil Seth', desc:'No cult. No surprise. The constant journey. Keats: remaining in uncertainty without irritable reaching after fact. Seth: the self is not a fixed thing but a process, forever becoming. Open hands. The apophatic and the scientific arrive at the same posture.', refs:'Cloud of Unknowing (c.1375) · James (1902) Varieties of Religious Experience · Otto (1917) The Idea of the Holy · Seth (2021) Being You' },
+  { id:'purpose', cat:'earth', r:5, x:0.58, y:0.68, z:0.38, name:'Purpose as love expressed', anchor:'Tedeschi & Calhoun — PTG; Frankl — logotherapy; Nouwen', desc:'Post-traumatic growth: deeper relational capacity and clearer purpose following the metabolization of suffering. Frankl: meaning is found not despite suffering but through the stance one takes toward it. The wounded healer — love finding form.', refs:'Tedeschi & Calhoun (1996) · Frankl (1946) Man\'s Search for Meaning · Nouwen (1972) The Wounded Healer' },
+  { id:'grief', cat:'grief', r:5.5, x:0.00, y:-0.60, z:0.10, name:'Grief as sacred work', anchor:'John of the Cross — Dark Night; Levine; womanist theology', desc:'John of the Cross: the dark night is not punishment but a necessary passage. Grief is the body completing the response to loss. Womanist theology names grief as politically necessary — the refusal to pretend systemic wounds did not happen.', refs:'John of the Cross — Dark Night of the Soul · Levine (1987) Healing into Life and Death · Williams (1993) · Halifax (2008)' },
+  { id:'darknight', cat:'grief', r:6.5, x:-0.20, y:-0.80, z:0.30, name:'The dark night of the soul', anchor:'John of the Cross; Underhill — Mysticism; Grof', desc:'Underhill\'s Mysticism charts the purgative, illuminative, and unitive ways — descent precedes ascent. Grof\'s spiritual emergency: profound transformative experiences can look like breakdown. The dark night is not pathology. It is the dissolution of what cannot survive the encounter with love.', refs:'Underhill (1911) Mysticism · John of the Cross — Ascent of Mount Carmel · Grof & Grof (1989) Spiritual Emergency' },
+  { id:'dying', cat:'grief', r:5, x:0.20, y:-0.40, z:0.48, name:'Conscious dying and accompaniment', anchor:'Halifax — GRACE model; Levine; Tibetan Buddhism', desc:'Halifax\'s GRACE model: Gather attention, Recall intention, Attune, Consider, Engage. Death as the great teacher of impermanence. Grief and mortality as the deepest teachers of non-extraction.', refs:'Halifax (2008) Being with Dying · Levine (1982) Who Dies? · Sogyal Rinpoche (1992) Tibetan Book of Living and Dying' },
+  { id:'nonextract', cat:'grief', r:6, x:0.30, y:0.60, z:0.28, name:'Non-extractive love', anchor:'Process theology — kenotic love; Neff; Murdoch', desc:'Love that doesn\'t demand return, doesn\'t consolidate power, doesn\'t require the beloved to be other than they are. Self-compassion predicts the capacity to give care without burnout. The dark night teaches this.', refs:'Neff (2011) · Murdoch (1970) The Sovereignty of Good · Whitehead — Process and Reality · Cobb & Griffin (1976)' },
+  { id:'satan2trauma', cat:'queer', r:8, x:0.30, y:-0.85, z:-0.38, name:'Second-satan-induced trauma', anchor:'Althaus-Reid; Winell — religious trauma; van der Kolk; Foucault', desc:'The second satan — any system that hoards power and enforces it through the policing of bodies — leaves the body carrying its violence: religious systems, medical systems, carceral systems, colonial logic, family systems, workplaces that extract and discard. Naming the system, not internalizing the wound, is where the path begins.', refs:'Winell (1993) Leaving the Fold · Ryan et al. (2009) · Shidlo et al. (2001) — conversion therapy harms · Foucault (1978) History of Sexuality · van der Kolk (2014) · Althaus-Reid (2000)' },
+  { id:'exile', cat:'queer', r:6, x:0.20, y:-0.62, z:-0.20, name:'Exile as contemplative location', anchor:'Fortunato (1982) — Embracing the Exile; Tigert (1996); Alison (2003)', desc:'Exile from any second-satan system is not a spiritual dead end but a contemplative location. The wilderness as the place where the divine is most honestly encountered. The margin becomes the centre. The exile knows things the insider cannot.', refs:'Fortunato (1982) Embracing the Exile · Tigert (1996) Coming Out Through Fire · Alison (2003) On Being Liked · McNeil (1988)' },
+  { id:'bodytheology', cat:'queer', r:6.5, x:0.42, y:-0.20, z:-0.48, name:'The body as theological site', anchor:'Althaus-Reid; Isherwood & Stuart (1998); Kugle — Sufi bodies', desc:'The particular, marked, desiring, gendered, racialised body is not an obstacle to contemplative life but its very site and medium. This is queer theology\'s most consistent and radical gift. Kugle\'s work on Sufi saints\' bodies: holiness was never disembodied.', refs:'Isherwood & Stuart (1998) Introducing Body Theology · Althaus-Reid (2000) · Kugle (2007) Sufis and Saints\' Bodies · Butler (1993) Bodies That Matter' },
+  { id:'twospirit', cat:'queer', r:5.5, x:0.55, y:0.18, z:0.38, name:'Two-spirit and gender-plural traditions', anchor:'Roscoe (1998); Conner (1993); Nanda (1990)', desc:'Non-Western contemplative traditions have held gender plurality as sacred for millennia. Two-spirit roles in Native North American traditions, hijra traditions in South Asia — ancient contemplative wisdom suppressed by colonial second-satan logic.', refs:'Roscoe (1998) Changing Ones · Conner (1993) Blossom of Bone · Nanda (1990) Neither Man nor Woman · Peletz (2009) Gender Pluralism' },
+  { id:'queermystic', cat:'queer', r:5.5, x:-0.30, y:0.38, z:0.52, name:'Queer mysticism', anchor:'Moore (1985); Keller (2003); Loughlin (2007); Jordan (2014)', desc:'The contemplative tradition\'s use of erotic language — Rumi, John of the Cross, the Song of Songs — has always exceeded heteronormative containment. The mystics were often queerer than their institutions.', refs:'Moore (1985) The Fire and the Rose Are One · Keller (2003) Face of the Deep · Loughlin (2007) Queer Theology · Jordan (2014) Convulsing Bodies' },
+  { id:'identityintegration', cat:'queer', r:5.5, x:0.38, y:0.45, z:0.10, name:'Identity integration', anchor:'Rodriguez & Ouellette (2000); Lease et al. (2005); Riggle et al. (2008)', desc:'Affirming communities significantly predict psychological wellbeing for LGBTQ+ people. Riggle et al. document genuine post-traumatic growth and positive identity dimensions. Integration is not the erasure of the wound but the discovery that the wound has been generative.', refs:'Rodriguez & Ouellette (2000) · Lease et al. (2005) · Riggle et al. (2008) · Dahl & Galliher (2012) · Pargament (2007)' },
+  { id:'artascontemplation', cat:'making', r:7, x:-0.45, y:0.28, z:-0.52, name:'Making as praying', anchor:'McNiff — Art as Medicine; Allen — open studio; Loori', desc:'What distinguishes contemplative art practice is not the medium or the product but the quality of attention brought to the process. McNiff: the image has its own healing intelligence. Loori: creativity is itself a gate of Zen practice. Making and praying are not always different activities.', refs:'McNiff (1992) Art as Medicine · Allen (1995) Art Is a Way of Knowing · Loori (2004) The Zen of Creativity · Cameron (1992) The Artist\'s Way' },
+  { id:'preverbal', cat:'making', r:5.5, x:-0.55, y:-0.10, z:-0.40, name:'The pre-verbal path', anchor:'Levine — poiesis; Pennebaker — expressive writing; Kaimal et al.', desc:'Art-making reaches forms of experience that language cannot access — because some experience is stored in image, movement, and sensation rather than word. Kaimal et al.: art-making reduces cortisol regardless of prior artistic experience.', refs:'Levine S.K. (1992) Poiesis · Pennebaker & Beall (1986) · Kaimal et al. (2016) Art Therapy · Malchiodi (2011) Handbook of Art Therapy' },
+  { id:'flow', cat:'making', r:5.5, x:-0.38, y:0.55, z:-0.36, name:'Flow as contemplative state', anchor:'Csikszentmihalyi (1990); Vessel et al. (2012); Nachmanovitch', desc:'Csikszentmihalyi\'s flow — absorbed, effortless engagement — characterises both contemplative and creative experience at their deepest. Vessel et al. found that profound aesthetic experience activates the same default mode network as meditation.', refs:'Csikszentmihalyi (1990) Flow · Vessel et al. (2012) Front. Human Neurosci. · Nachmanovitch (1990) Free Play · Winnicott (1971) Playing and Reality' },
+  { id:'communitymaking', cat:'making', r:6, x:0.45, y:0.35, z:-0.28, name:'Making together as sacred assembly', anchor:'Dissanayake (1988); Taizé; Rogers N. (1993)', desc:'Many of the most significant contemplative art practices — sacred chant, communal weaving, liturgical dance, the Taizé model — are inherently communal. Making together is itself a form of being together in the presence of something larger than any individual will.', refs:'Dissanayake (1988) What Is Art For? · Rogers N. (1993) The Creative Connection · Knill et al. (2005) · Goldberg (1986) Writing Down the Bones' },
+  { id:'processoverproduct', cat:'making', r:5, x:-0.20, y:0.18, z:-0.55, name:'Process over product', anchor:'McNiff (1998); Cameron (1992); Lamott (1994)', desc:'The liberation from skill anxiety that contemplative art practice offers resonates deeply for those whose bodies have been judged and found wanting by second-satan systems. The shitty first draft is a contemplative practice. Trust the process.', refs:'McNiff (1998) Trust the Process · Cameron (1992) The Artist\'s Way · Lamott (1994) Bird by Bird · Allen (2005) Art Is a Spiritual Path' },
+  { id:'authenticmovement', cat:'making', r:5, x:-0.38, y:0.10, z:-0.62, name:'Authentic movement and somatic art', anchor:'Adler (2002); Whitehouse; Eddy (2016)', desc:'Authentic Movement: movement as active imagination, the body as the site of inner knowing. Not performance but presence. The body remembers what the mind has not yet found language for.', refs:'Adler (2002) Offering from the Conscious Body · Whitehouse (1979) · Eddy (2016) Mindful Movement · Chodorow (1991) Dance Therapy and Depth Psychology' },
+];
+
+const LINES = [
+  ['interoception','polyvagal'],['polyvagal','window'],['window','difficult'],
+  ['difficult','satan2trauma'],['contemp_neuro','interoception'],['contemp_neuro','window'],
+  ['selfcompass','rupture'],['rupture','repair'],['repair','recognition'],
+  ['recognition','selfcompass'],['selfcompass','interoception'],
+  ['apophatic','kenosis'],['kenosis','nondual'],['intertraditional','nondual'],
+  ['discern','apophatic'],['discern','selfcompass'],['discern','kenosis'],
+  ['liberationtheol','engaged'],['engaged','mujerista'],['mujerista','permission'],
+  ['permission','selfcompass'],['engaged','recognition'],
+  ['earth_partner','interbeing'],['interbeing','mystery'],['mystery','nondual'],
+  ['purpose','earth_partner'],['purpose','nonextract'],
+  ['grief','darknight'],['darknight','dying'],['dying','nonextract'],
+  ['grief','satan2trauma'],['grief','recognition'],
+  ['liberationtheol','recognition'],['polyvagal','rupture'],
+  ['interbeing','recognition'],['earth_partner','engaged'],
+  ['darknight','apophatic'],['dying','mystery'],['nonextract','selfcompass'],
+  ['discern','engaged'],['satan2trauma','exile'],['exile','bodytheology'],
+  ['bodytheology','liberationtheol'],['twospirit','earth_partner'],
+  ['twospirit','intertraditional'],['queermystic','apophatic'],
+  ['queermystic','discern'],['identityintegration','selfcompass'],
+  ['identityintegration','recognition'],['identityintegration','purpose'],
+  ['exile','darknight'],['satan2trauma','polyvagal'],
+  ['bodytheology','interoception'],['bodytheology','selfcompass'],
+  ['artascontemplation','flow'],['artascontemplation','preverbal'],
+  ['preverbal','contemp_neuro'],['preverbal','trauma'],
+  ['flow','selfcompass'],['flow','nondual'],
+  ['communitymaking','recognition'],['communitymaking','repair'],
+  ['authenticmovement','interoception'],['authenticmovement','preverbal'],
+  ['processoverproduct','selfcompass'],['processoverproduct','exile'],
+  ['artascontemplation','mujerista'],['communitymaking','engaged'],
+];
+
+let rotX = 0.30, rotY = -0.50, scl = 1;
+let dragging = false, lastMX = 0, lastMY = 0;
+let selected = null, activeCat = null;
+let W = 0, H = 0, t = 0;
+let animId = null;
+
+function resize() {
+  W = canvas.offsetWidth;
+  H = Math.round(W * 0.65);
+  canvas.width = W;
+  canvas.height = H;
+}
+
+function project(x, y, z) {
+  const cx = Math.cos(rotX), sx = Math.sin(rotX);
+  const cy = Math.cos(rotY), sy = Math.sin(rotY);
+  const y1 = y * cx - z * sx;
+  const z1 = y * sx + z * cx;
+  const x2 = x * cy + z1 * sy;
+  const z2 = -x * sy + z1 * cy;
+  const fov = 3.5;
+  const sc = fov / (fov + z2 * 0.5 + 0.001);
+  return { sx: W*0.5 + x2*sc*W*0.28*scl, sy: H*0.5 - y1*sc*H*0.35*scl, depth: z2, scale: sc };
+}
+
+function getProjected() {
+  return STARS.map(s => ({ ...s, proj: project(s.x, s.y, s.z) }))
+    .sort((a, b) => a.proj.depth - b.proj.depth);
+}
+
+function drawSparkle(cx, cy, len, color, alpha) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(cx - len, cy); ctx.lineTo(cx + len, cy);
+  ctx.moveTo(cx, cy - len); ctx.lineTo(cx, cy + len);
+  const d = len * 0.55;
+  ctx.moveTo(cx - d, cy - d); ctx.lineTo(cx + d, cy + d);
+  ctx.moveTo(cx + d, cy - d); ctx.lineTo(cx - d, cy + d);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function draw() {
+  t += 0.025;
+  if (!W || !H) { animId = requestAnimationFrame(draw); return; }
+
+  ctx.fillStyle = '#06091c';
+  ctx.fillRect(0, 0, W, H);
+
+  for (let i = 0; i < 220; i++) {
+    const bx = (Math.sin(i * 7.31 + 1.1) * 0.5 + 0.5) * W;
+    const by = (Math.sin(i * 3.71 + 0.4) * 0.5 + 0.5) * H;
+    const tw = 0.4 + 0.6 * Math.abs(Math.sin(t * 0.6 + i * 0.9));
+    ctx.beginPath();
+    ctx.arc(bx, by, (0.18 + (i % 4) * 0.16) * tw, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(190,188,255,${(0.07 + (i % 6) * 0.022) * tw})`;
+    ctx.fill();
+  }
+
+  const projected = getProjected();
+
+  LINES.forEach(([a, b]) => {
+    const sa = projected.find(s => s.id === a);
+    const sb = projected.find(s => s.id === b);
+    if (!sa || !sb) return;
+    const isActive = selected && (selected.id === a || selected.id === b);
+    const bothInCat = activeCat && sa.cat === activeCat && sb.cat === activeCat;
+    const eitherInCat = activeCat && (sa.cat === activeCat || sb.cat === activeCat);
+    ctx.beginPath();
+    ctx.moveTo(sa.proj.sx, sa.proj.sy);
+    ctx.lineTo(sb.proj.sx, sb.proj.sy);
+    if (isActive) {
+      ctx.strokeStyle = 'rgba(210,200,255,0.55)'; ctx.lineWidth = 1; ctx.setLineDash([]);
+    } else if (bothInCat) {
+      ctx.strokeStyle = cc[sa.cat] + 'aa'; ctx.lineWidth = 0.8; ctx.setLineDash([]);
+    } else if (activeCat && !eitherInCat) {
+      ctx.strokeStyle = 'rgba(100,98,140,0.04)'; ctx.lineWidth = 0.3; ctx.setLineDash([3,8]);
+    } else {
+      const col = cc[sa.cat] || '#888';
+      const rv = parseInt(col.slice(1,3),16), gv = parseInt(col.slice(3,5),16), bv = parseInt(col.slice(5,7),16);
+      ctx.strokeStyle = `rgba(${rv},${gv},${bv},0.10)`; ctx.lineWidth = 0.5; ctx.setLineDash([2,6]);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  });
+
+  projected.forEach((s, idx) => {
+    const isSel = selected && selected.id === s.id;
+    const inCat = activeCat && s.cat === activeCat;
+    const dimmed = activeCat && !inCat;
+    const color = cc[s.cat] || '#aaa';
+    const baseR = s.r * s.proj.scale * scl;
+    const r = Math.max(2.5, Math.min(baseR, 22));
+    const phase = idx * 0.43;
+    const sparkleAmt = 0.5 + 0.5 * Math.sin(t * 1.1 + phase);
+    const alpha = dimmed ? 0.10 : 1.0;
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    if (isSel) {
+      ctx.beginPath(); ctx.arc(s.proj.sx, s.proj.sy, r+11, 0, Math.PI*2);
+      ctx.fillStyle = color+'16'; ctx.fill();
+      ctx.beginPath(); ctx.arc(s.proj.sx, s.proj.sy, r+5, 0, Math.PI*2);
+      ctx.fillStyle = color+'36'; ctx.fill();
+    }
+    if (inCat) {
+      ctx.beginPath(); ctx.arc(s.proj.sx, s.proj.sy, r+7+sparkleAmt*3, 0, Math.PI*2);
+      ctx.fillStyle = color+'22'; ctx.fill();
+    }
+
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const angle = (i * Math.PI / 5) - Math.PI / 2;
+      const rad = i % 2 === 0 ? r : r * 0.42;
+      const px = s.proj.sx + Math.cos(angle) * rad;
+      const py = s.proj.sy + Math.sin(angle) * rad;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fillStyle = isSel ? color : (inCat ? color : color + 'a0');
+    ctx.fill();
+    ctx.restore();
+
+    const sparkAlpha = dimmed ? 0.03 : (inCat ? 0.5 + sparkleAmt*0.5 : 0.2 + sparkleAmt*0.3);
+    const sparkLen = r * (0.5 + sparkleAmt * 0.6);
+    drawSparkle(s.proj.sx, s.proj.sy, sparkLen, color, sparkAlpha);
+
+    ctx.save();
+    ctx.globalAlpha = dimmed ? 0.12 : (inCat ? 1.0 : 0.62);
+    ctx.font = `${(isSel || inCat) ? 500 : 400} 10px -apple-system, sans-serif`;
+    ctx.fillStyle = (isSel || inCat) ? '#e4e0ff' : 'rgba(168,164,218,1)';
+    ctx.textAlign = 'center';
+    const label = s.name.length > 26 ? s.name.slice(0,25)+'…' : s.name;
+    ctx.fillText(label, s.proj.sx, s.proj.sy + r + 14);
+    ctx.restore();
+  });
+
+  animId = requestAnimationFrame(draw);
+}
+
+function getHit(mx, my) {
+  const projected = getProjected();
+  for (let i = projected.length - 1; i >= 0; i--) {
+    const s = projected[i];
+    const r = Math.max(2.5, Math.min(s.r * s.proj.scale * scl, 22));
+    const dx = mx - s.proj.sx, dy = my - s.proj.sy;
+    if (Math.sqrt(dx*dx + dy*dy) < r + 14) return s;
+  }
+  return null;
+}
+
+function showPopup(s) {
+  const wrap = document.getElementById('wrap');
+  const wR = wrap.getBoundingClientRect();
+  const cR = canvas.getBoundingClientRect();
+  const sx = s.proj.sx / (canvas.width / cR.width);
+  const sy = s.proj.sy / (canvas.height / cR.height);
+  const offL = cR.left - wR.left, offT = cR.top - wR.top;
+  const col = cc[s.cat] || '#aaa';
+  document.getElementById('pn').textContent = s.name;
+  const pc = document.getElementById('pc');
+  pc.textContent = (CONSTELLATIONS.find(c => c.id === s.cat)||{}).label||'';
+  pc.style.color = col;
+  const pa = document.getElementById('pa');
+  pa.textContent = s.anchor; pa.style.color = col;
+  document.getElementById('pd').textContent = s.desc;
+  document.getElementById('pr').textContent = s.refs;
+  popup.style.display = 'block';
+  const pw = 260, ph = 290;
+  let px = offL + sx + 18, py = offT + sy - 20;
+  if (px + pw > wR.width - 4) px = offL + sx - pw - 18;
+  if (py + ph > cR.height) py = offT + sy - ph;
+  if (py < 2) py = 2; if (px < 2) px = 2;
+  popup.style.left = px + 'px'; popup.style.top = py + 'px';
+}
+
+canvas.addEventListener('mousedown', e => { dragging = true; lastMX = e.clientX; lastMY = e.clientY; });
+window.addEventListener('mouseup', () => { dragging = false; });
+canvas.addEventListener('mousemove', e => {
+  if (dragging) {
+    rotY += (e.clientX - lastMX) * 0.007;
+    rotX += (e.clientY - lastMY) * 0.007;
+    lastMX = e.clientX; lastMY = e.clientY;
+  } else {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const my = (e.clientY - rect.top) * (canvas.height / rect.height);
+    canvas.style.cursor = getHit(mx, my) ? 'pointer' : 'grab';
+  }
+});
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const my = (e.clientY - rect.top) * (canvas.height / rect.height);
+  const hit = getHit(mx, my);
+  if (hit) {
+    if (selected && selected.id === hit.id) { selected = null; popup.style.display = 'none'; }
+    else { selected = hit; showPopup(hit); }
+  } else { selected = null; popup.style.display = 'none'; }
+});
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  scl *= e.deltaY > 0 ? 0.93 : 1.07;
+  scl = Math.max(0.3, Math.min(3.5, scl));
+}, { passive: false });
+canvas.addEventListener('touchstart', e => {
+  dragging = true; lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY;
+}, { passive: true });
+canvas.addEventListener('touchmove', e => {
+  if (!dragging) return;
+  rotY += (e.touches[0].clientX - lastMX) * 0.007;
+  rotX += (e.touches[0].clientY - lastMY) * 0.007;
+  lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY;
+}, { passive: true });
+canvas.addEventListener('touchend', () => { dragging = false; });
+
+window.addEventListener('resize', () => {
+  resize(); popup.style.display = 'none'; selected = null;
+});
+
+document.getElementById('legend').innerHTML = CONSTELLATIONS.map(c =>
+  `<div class="li" data-cat="${c.id}" onclick="toggleCat('${c.id}')">
+    <div class="ld" style="background:${c.color}"></div>
+    <span>${c.label}</span>
+  </div>`
+).join('');
+
+window.toggleCat = function(catId) {
+  activeCat = activeCat === catId ? null : catId;
+  selected = null; popup.style.display = 'none';
+  document.querySelectorAll('.li').forEach(el => {
+    el.classList.toggle('active', el.dataset.cat === activeCat);
+  });
+};
+
+resize();
+if (animId) cancelAnimationFrame(animId);
+draw();
+</script>
+</body>
+</html>
