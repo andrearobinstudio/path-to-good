@@ -2,7 +2,7 @@
 
 **An interactive star chart for navigating queering contemplative spirituality.**
 
-→ **[View the live chart](https://andrearobinstudio.github.io/path-to-good)**
+→ **[View the live chart]((https://andrearobinstudio.github.io/path-to-good/dear-ordinary-star-chart.html))**
 
 ---
 
